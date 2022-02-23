@@ -1,0 +1,111 @@
+/**
+	Aaron Cantu
+	HW3-q1
+	Make a function that takes a line of chars and read how many 
+	of each characters there are, in each one, how many chars are two of the same right after eachtoher,
+	and how many are in 3's right after one another.
+	EE5103
+	2/11/22
+
+*/
+
+#include <iostream>
+#include <string.h>
+
+using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+
+//prototype
+ void doTheThing(string);
+
+ int main()
+ {
+ 	// declare a string
+ 	string lin;
+
+ 	//Request user to input text.
+ 	cout << "Please input as many lines as you'd like. To end press end of file keys.\n";
+  
+ 	while(getline(cin, lin))
+ 	{ 		
+ 		//send lin to do the thing.	
+ 		cout << endl;
+ 		doTheThing(lin);
+ 	}
+ 	return 0;
+ }
+
+void doTheThing(string lin)
+{
+	/** 
+	 * this will be a void statement that allows the loop in main to produce the following
+	 * Everytime user hits enter it will produce how many times a letter shows up
+	 * the bigram, and trigram. 
+	 * This also includes symbols spaces and capitals.
+	*/
+  
+	int twoRow = 1;
+	int threeRow = 1;
+	int mult =0;
+  
+	decltype(lin.size()) l = lin.size();
+		//Nested for loop to run through for each count.
+		for(decltype(lin.size()) i = 0; i != lin.size(); i++)
+		{
+			//second to compare the current value with any previous values.
+			for(decltype(lin.size()) j = 0; j <= lin.size(); j++){
+				//First if statements ups the amount of times
+				//it's been seen. Also, will only print the 
+				//first iteration ofthe letter.
+				if(lin[i] == lin[j])
+				{
+					//This is if a letter has already occured
+					//and is repeating. Go to here  so it doesn't
+					//re-print anything.
+					if(i > j && lin[i] == lin[j])
+						goto here;
+
+					mult++;
+				}
+        
+        //This statement counts how many bigrams
+				if(lin[i] == lin[j+2] && lin[j+3] == lin[i+1] && j != (lin.size()-3))
+				{
+					// debugging code.	
+					// cout << "\n****************************************************\n";
+					// cout << "in bigram\n";
+					// cout << " Here we see i and i+1 "<< lin[i]<< lin[i+1] << endl;
+					// cout << " Here we see j+2 and j+3 "<< lin[j+2]<< lin[j+3] << endl;
+					// cout << " Count for j is " << j;
+					twoRow++;
+					// cout << "Two row is : " << twoRow << endl;
+				}
+				//this statements counts trigrams.
+				if(lin[i] == lin[j+3] && lin[j+4] == lin[i+1] && lin[i+2] == lin[j+5] && j != (lin.size() - 5))
+				{
+					// debugging code.	
+					// cout << "****************************************************\n";
+					// cout << "in trigram\n";
+					// cout << " Here we see i, i+1 and i+2 "<< lin[i]<< lin[i+1] << lin[i+2] << endl;
+					// cout << " Here we see j+2, j+3 and j+4 "<< lin[j+3]<< lin[j+4] << lin[j+5] << endl;
+					// cout << " Count for j is " << j << endl;
+					threeRow++;
+					// cout << "three row is: " << threeRow << endl;
+				}
+
+			}
+			//print the stuff.
+			cout << "The character at: " << lin[i] << "\nThis letter occurs: " << mult;
+			cout << "\nThe Bigram of "<< lin[i] << lin[i+1] << " occurs: " << twoRow << "\nThe Trigram of "<< lin[i] << lin[i+1]  << lin[i+2] << " is: " << threeRow << endl;
+			cout << "********************************************************************" << endl;
+			here: cout << "";
+			twoRow = 1;
+			threeRow = 1;
+			mult = 0;
+		}
+	cout << "\nEnter a new line.\n" << endl;
+	return;
+}
