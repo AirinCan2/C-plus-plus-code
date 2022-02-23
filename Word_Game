@@ -1,0 +1,141 @@
+/**
+	Aaron Cantu
+	HW3-q2
+	make wordle typeof game.
+	EE5103
+	2/11/22
+
+*/
+
+#include <iostream>
+#include <string.h>
+#include <cstdlib>
+#include <time.h>
+
+using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+//prototype
+void game(string, string);
+
+int main(){
+	//variables
+	string guess;
+	int count= 0;
+	int num = 0;
+	srand(time(NULL));
+	num = rand() % 5;
+	string word;
+	cout << num << "\n";
+
+	//Let's have  5 set words.
+	switch(num)
+	{
+		case 1: word = "heavy";
+				break;
+		case 2: word = "caulk";
+				break;
+		case 3: word = "moist";
+				break;
+		case 4: word = "other";
+				break;
+		case 5: word = "flask";
+				break;
+		default: word = "honor";
+		break;
+	}
+	//Rules of the game
+	cout << "Please enter you guess for this 5 letter word: " << endl;
+	cout << "You have 5 attempt to get the word.\n";
+	cout << "A letter in a correct position will be have a * under it.\nA letter that is in the word but wrong position has a !.\nA bad letter has an X.\n";
+
+	//Loop if we hit 5 we end game. 
+	while(count != 5)
+	{
+		here:
+		getline(cin, guess);
+		//Make lower case to it doesn't have a problem.
+		for(decltype(guess.size()) j = 0; j <= guess.size(); j++)
+		{
+			guess[j] = tolower(guess[j]);
+
+		}
+		
+		cout << endl;
+		//Check to see if size of string is correct
+		if(guess.size() > 5)
+		{
+			cout << "Please enter correct word size.\n";
+			goto here;
+		}
+		//send to function
+		game(guess, word);
+		//If we have the right word end game.
+		if(guess == word)
+		{
+			cout << "You've Guessed it! \n";
+			count = 5;
+			goto here1;
+		}
+		count++;
+		//If we're wrong 5 times end game.
+		if(count == 5)
+			cout << "Better luck next time.\n";
+		here1: cout << "\n";
+	}
+
+}
+
+void game(string guess, string word)
+{
+	//variables for display
+	string correct;
+	char w = '!', r = '*', h = 'X';
+
+	cout << "You entered: \n";
+	//Show the input again
+	for(decltype(guess.size()) j = 0; j <= guess.size(); j++)
+	{
+		cout << guess[j] << " ";
+
+	}
+	cout << endl;	
+
+	//Do the logic for the game.
+	for(decltype(guess.size()) i = 0; i != guess.size(); i++)
+		{
+			//Check to see what position has correct value.
+			for(decltype(guess.size()) j = 0; j <= guess.size(); j++)
+			{
+				//Debug.
+				// cout << " This is guess[i] when i is: "<< j << " guess: " << guess[j] << endl;
+				// cout << " This is word[j] when j is: "<< i << " guess: " << word[i] << endl;
+				//If we're correct on any of these send us to the end of the j loop.
+				if(guess[i] == word[j] && i == j)
+				{
+					cout << r << " ";
+					j = guess.size();
+					
+				}else if(guess[i] == word[j] && i != j)
+				{
+					cout << w << " ";
+					j = guess.size();
+					
+				}else if(guess[i] != word[j] && j == guess.size())
+				{
+					cout << h << " ";
+					j = guess.size();
+					
+				}
+			}
+			
+		}
+		cout << endl;
+		//let them know they're wrong.
+		if(guess != word)
+			cout << "Incorrect Guess.\n";
+		return;
+
+}
