@@ -1,0 +1,76 @@
+/**
+	Aaron Cantu
+	HW2-q1
+	Make a function that works like the Euclidean Algorithm.
+	EE5103
+	2/11/22
+
+*/
+
+#include <iostream>
+
+using std::cout;
+using std::cin;
+using std::endl;
+
+int E_alg(int, int);
+
+int main(){
+
+	int a =0;
+	int b = 0;
+	int c = 0;
+
+	cout << "In this program you will be able to compare two numbers to see their Greatest Common Divisor (GCD).\n";
+	cout << "Please enter one number to compare (one at a time): ";
+	cin >> a;
+	cout << "\nPlease enter one number to compare (one at a time): ";
+	cin >> b;
+
+	c = E_alg(a,b);
+
+	cout << c << endl;
+	return 0;
+}
+
+int E_alg(int a, int b)
+{
+		//Keep track of the remainders and next b variable.
+		int x =0;
+		int y =0;
+		
+		int count =0;
+		//a while loop that  keeps going till either a or b are 0. if they are 0 this will break.
+		while(a != 0 || b != 0)
+		{
+			//to ensure this while loop works we exit sooner to ensure it correctly ends.
+			if(b == 0 && count == 0){
+				cout << "The GCD is: ";
+
+				cout  << "GCD(" << a << "," << b << ") = ";
+				return a;
+
+			}
+
+			if(count == 0)
+				cout << "The GCD is: ";
+
+			cout  << "GCD(" << a << "," << b << ") = ";
+			//the formula that takes the remainder and next variable. X could be printed to show the equation
+			//that equals the previous divison. 
+			x = a/b;
+			y = a%b;
+
+		 	a = b;
+		 	b = y;
+		 	//count mainly for the initial cout and if b == 0 scenario. 
+			count++;
+			
+			if(y == 0){
+				return a;
+			}
+			
+		}
+
+		return a;
+}
