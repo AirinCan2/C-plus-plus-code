@@ -1,0 +1,61 @@
+/**
+	Aaron Cantu
+	HW1-q4
+	Write a C++ program that reads a telephone number from the 
+	user and outputs if the telephone number
+	is in the right format. For the purpose of this question, 
+	a telephone number is in the right format, if the
+	format is (qqq) qqq-qqqq. Here q is a digit from 0 to 9. 
+	Also, the very first q cannot be a zero.
+	EE5103
+	2/5/22
+
+*/
+
+#include <iostream>
+#include <string.h>
+using std::cout;
+using std::cin;
+using std::endl;
+
+//void telephoneNum(char[]);
+
+int main(){
+
+	char x[20];
+	int count =0;
+
+	cout << "Please enter a phone number in this format (xxx) xxx-xxxx: \n";
+	
+	cin.getline(x, 20);
+	
+	for(int i = 0;i<15; i++){
+		
+		if(x[i] != '(' && i == 0)
+		{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position" << "\n Ending program\n";
+			i=14;
+		}else if(x[i] == 0 && i == 1)
+		{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position"<< "\n Ending program\n";			
+			i=14;
+		}else if(x[i] != ')' && i == 4)
+		{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position"<< "\n Ending program\n";
+			i=14;
+		}else if(x[i] != ' ' && i == 5)
+		{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position"<< "\n Ending program\n";
+			i=14;
+		}else if(x[i] != '-' && i == 9)
+		{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position"<< "\n Ending program\n";
+			i=14;
+		}else if(x[i] == '0' || x[i] == ')' || x[i] == '1' || x[i] == '2' || x[i] == '3' || x[i] == '4' || x[i] == '5' || x[i] == '6'|| x[i] == '7' || x[i] == '8' || x[i] == '9' || x[i] == '(' || x[i] == ')' || x[i] == ' ' || x[i] == '-'){
+			cout << x[i];
+		}else{
+			cout << "\nInvaild input: " << x[i] << " at " << i << " position"<< "\n Ending program\n";
+			i=14;
+		}
+	}
+}
