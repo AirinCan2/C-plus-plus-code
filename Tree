@@ -1,0 +1,60 @@
+/**
+	Aaron Cantu
+	HW1-q1
+	Make a tree using * and ^ 
+	EE5103
+	2/4/22
+
+*/
+
+#include <iostream>
+using std::cout;
+using std::endl;
+void tree(char,char);
+
+int main(){
+	//Declare Variables
+	char s ='*', c ='^';
+	
+
+	tree(c,s);
+
+}
+//Function that makes a tree.
+void tree(char x, char y){
+	int counter = 1;
+	for(int i = 0; i < 6; i++)
+	{
+		//creates indentions
+		switch(i)
+		{
+			case 0: cout << "          ";
+					break;
+			case 1: cout << "         ";
+					break;
+			case 2: cout << "        ";
+					break;
+			case 3: cout << "       ";
+					break;
+			case 4: cout << "      ";
+					break;
+			default: cout << "     ";
+					break;
+		}
+		//Loop to produce the tree and swap carrot and star.
+		//counter for how many of each symbol should be on 
+		//each layer. 
+		for(int j = 0;j < counter; j++)
+		{
+			if(i==0||i==2||i==4)
+				cout << x;
+			if(i==1||i==3||i==5)
+				cout << y;
+		}
+		cout << endl;
+		cout << endl;
+		counter +=2;
+
+	}
+
+}
