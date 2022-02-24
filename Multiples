@@ -5,10 +5,8 @@
 	of each characters there are, in each one, how many chars are two of the same right after eachtoher,
 	and how many are in 3's right after one another.
 	EE5103
-	2/11/22
-
+	2/18/22
 */
-
 #include <iostream>
 #include <string.h>
 
