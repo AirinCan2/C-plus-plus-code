@@ -1,0 +1,165 @@
+/**
+	Aaron Cantu
+	HW1-q2
+	Write a C++ program to display all unique permutations of an input sequence of chars. For an input of
+	“dog”, the output should be: “dog”, “dgo”, “odg”, “ogd”, “god”, “gdo”. However, for “Bob”, the output
+	should be: “bob”, “bbo”, “obb”.
+	EE5103
+	2/5/22
+
+*/
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+void swap(char[]);
+
+int main(){
+	//q2 variables
+	char b[3] = {'b', 'o', 'b'};
+	char d[3] = {'d', 'o', 'g'};
+
+	swap(d);
+	cout << endl;
+	swap(b);
+
+	return 0;
+}
+
+//Will use two checks to ensure that the same outcome does
+//not occur. If it does we'll break and end.
+void swap(char a[3]){
+	char check[3];
+	char secCheck[3];
+	int count = 0;
+	//cout<< "we're in the function\n";
+
+	for(int i =0; i < 3; i++)
+	{
+		check[i] = a[i];
+		secCheck[i] = a[i];
+	}
+
+	for(int i=0; i<5; i++){
+
+		//Can print a[i] at start.
+		//Count should never equal 1 again. 
+		//4 types of movement for a[i]
+		//cout << "In  main loop\n";
+
+		if(count == 0){
+			cout << '"';
+			for(int j =0;j<3;j++)
+				cout << a[j];
+
+			cout << '"';
+			count++;
+		}
+		
+		//There are a total of 4 variations that occur for the 6 name changes.
+		//Switch statement to cycle through all 4 of them and end it.
+		cout << " ";
+		switch(count){
+			case 1: check[0] = secCheck[0];
+					check[1] = secCheck[2];
+					check[2] = secCheck[1];
+
+					//Check to see if a[i] and check or check and seccheck are equal. 
+					if(check[0] == secCheck[0] && check[1] == secCheck[1] && check[2] == secCheck[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+					if(check[0] == a[0] && check[1] == a[1] && check[2] == a[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+					cout << " " << '"';
+					for(int j =0; j< 3; j++)
+						cout << check[j];
+					cout << '"';
+					
+					
+
+					for(int j = 0;j<3;j++)
+						secCheck[j] = check[j];
+					
+					if(i!=2)
+					{
+						count++;
+						//cout << count;
+					}
+					if(i == 2)
+					{
+						//cout << count;
+						count = 3;
+						//cout << count;
+					}
+					if(i == 5)
+					{
+						//cout << "count at : " << count;
+						return;
+					}
+					break;
+
+			case 2: check[0] = secCheck[2];
+					check[1] = secCheck[0];
+					check[2] = secCheck[1];
+
+					if(check[0] == secCheck[0] && check[1] == secCheck[1] && check[2] == secCheck[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+					if(check[0] == a[0] && check[1] == a[1] && check[2] == a[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+					cout << " " << '"';
+					for(int j =0; j< 3; j++)
+						cout << check[j];
+					cout << '"';
+					//cout << endl;
+					
+
+					for(int j = 0;j<3;j++)
+						secCheck[j] = check[j];
+					count = 1;
+					break;
+			case 3: check[0] = secCheck[1];
+					check[1] = secCheck[0];
+					check[2] = secCheck[2];
+					//cout << " in case 3";
+					if(check[0] == secCheck[0] && check[1] == secCheck[1] && check[2] == secCheck[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+					if(check[0] == a[0] && check[1] == a[1] && check[2] == a[2])
+					{
+						//cout << "same spelling case 1\n";
+						return;
+					}
+
+					cout << " " << '"';
+					for(int j =0; j< 3; j++)
+						cout << check[j];
+					cout << '"';
+					//cout << endl;
+					
+
+					for(int j = 0;j<3;j++)
+						secCheck[j] = check[j];
+					count=1;
+					break;
+
+
+		}
+
+	}
+
+
+}
