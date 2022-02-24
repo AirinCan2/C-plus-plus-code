@@ -1,3 +1,4 @@
+
 /**
 	Aaron Cantu
 	HW3-q2
@@ -20,36 +21,24 @@ using std::string;
 //prototype
 void game(string, string);
 
+string correct_Word(int);
+
 int main(){
 	//variables
 	string guess;
 	int count= 0;
 	int num = 0;
 	srand(time(NULL));
-	num = rand() % 5;
+	num = rand() % 10;
 	string word;
-	cout << num << "\n";
 
-	//Let's have  5 set words.
-	switch(num)
-	{
-		case 1: word = "heavy";
-				break;
-		case 2: word = "caulk";
-				break;
-		case 3: word = "moist";
-				break;
-		case 4: word = "other";
-				break;
-		case 5: word = "flask";
-				break;
-		default: word = "honor";
-		break;
-	}
+	//get a word!
+	word = correct_Word(num);
+	
 	//Rules of the game
-	cout << "Please enter you guess for this 5 letter word: " << endl;
-	cout << "You have 5 attempt to get the word.\n";
-	cout << "A letter in a correct position will be have a * under it.\nA letter that is in the word but wrong position has a !.\nA bad letter has an X.\n";
+	cout << "Please enter your guess for this 5 letter word: " << endl;
+	cout << "You have 5 attempts to guess the correct word.\n";
+	cout << "* means correct char and position.\n! means correct char but wrong position.\nX means wrong for both char and position.\n";
 
 	//Loop if we hit 5 we end game. 
 	while(count != 5)
@@ -65,11 +54,12 @@ int main(){
 		
 		cout << endl;
 		//Check to see if size of string is correct
-		if(guess.size() > 5)
+		if(guess.size() != 5)
 		{
 			cout << "Please enter correct word size.\n";
 			goto here;
 		}
+		
 		//send to function
 		game(guess, word);
 		//If we have the right word end game.
@@ -137,5 +127,37 @@ void game(string guess, string word)
 		if(guess != word)
 			cout << "Incorrect Guess.\n";
 		return;
+
+}
+
+//Function that gives main a choiceout of 10 words. 
+string correct_Word(int num)
+{
+	string word;
+	switch(num)
+	{
+		case 1: word = "heavy";
+				break;
+		case 2: word = "caulk";
+				break;
+		case 3: word = "moist";
+				break;
+		case 4: word = "other";
+				break;
+		case 5: word = "flask";
+				break;
+		case 6: word = "angry";
+				break;
+		case 7: word = "plant";
+				break;
+		case 8: word = "flame";
+				break;
+		case 9: word = "stain";
+				break;
+		default: word = "honor";
+		break;
+	}
+
+	return word;
 
 }
