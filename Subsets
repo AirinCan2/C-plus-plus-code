@@ -1,0 +1,63 @@
+/**
+	Aaron Cantu
+	HW1-q3
+	Write a C++ program to display all subsets of a given set of numbers (read about power set of a given
+	set, if you are not familiar with this concept). For an input set of numbers of {1,2,3}, the output should
+	be displayed exactly in the following format using { and }:
+	EE5103
+	2/5/22
+
+*/
+
+#include <iostream>
+
+using std::cout;
+using std::endl;
+
+void subset(int[]);
+
+int main(){
+
+	int x[3] = {1,2,3};
+
+	subset(x);
+	return 0;
+}
+
+void subset(int y[3]){
+	int a = 0, b =0, c=0;
+
+	for(int i = 0; i<3;i++){
+		if(i==0)
+			a = y[i];
+		if(i==1)
+			b = y[i];
+		if(i==2)
+			c = y[i];
+	}
+
+	for(int i=0; i<8; i++)
+	{
+		
+		switch(i)
+		{
+			case 0: cout << "{" << a << "," << b << "," << c << "}\n";
+					break;
+			case 1: cout << "{" << a << "," << b << "}\n";
+					break;
+			case 2: cout << "{" << a << "," << c << "}\n";
+					break;
+			case 3: cout << "{" << b << "," << c << "}\n";
+					break;
+			case 4: cout << "{" << a << "}\n";
+					break;
+			case 5: cout << "{" << b << "}\n";
+					break;
+			case 6: cout << "{" << c << "}\n";
+					break;
+			default: cout << "{" << "}";
+					break;
+		}
+	}
+
+}
