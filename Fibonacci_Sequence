@@ -1,0 +1,61 @@
+/**
+	Aaron Cantu
+	HW2-q2
+	Create a function that checks if a Number is a fibonacci sequence number.
+	EE5103
+	2/11/22
+
+*/
+
+#include <iostream>
+
+using std::cout;
+using std::cin;
+using std::endl;
+
+void is_fib(int);
+
+int main()
+{
+	int x =0;
+	cout << "Please submit a number to see if it is part of the Fibonacci sequence: ";
+	cin >> x;
+	is_fib(x);
+
+	return 0;
+}
+
+void is_fib(int x)
+{
+	int a =0;
+	int b =1;
+	int y = 0;
+	bool check = true;
+
+	while(check)
+	{
+		if(y != x)
+			cout  << a << " + " << b;
+
+
+		y = a + b;
+		a=b;
+		b=y;
+		cout << " = " << y << endl;
+		
+		if(y == x)
+			check=false;
+
+		if(y > x)
+			check = false;
+
+
+
+	}
+	//cout << "value of a : " << a << " value of b: " << b << " value of y: " << y << endl; 
+	if(y == x)
+		cout <<"\n"<< x << " is a Fibonacci number.\n";
+	else
+		cout <<"\n"<< x << " is not a Fibonacci number.\n";
+	return;
+}
