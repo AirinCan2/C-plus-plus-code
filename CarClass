@@ -1,0 +1,258 @@
+/**
+	Aaron Cantu
+	HW4-q1
+	We’ll design a new class to hold a sequence of numbers and various statistics
+	about that sequence. Design a class to hold a sequence of doubles and its corresponding mean, median,
+	mode, standard deviation and variance. You will probably need to declare a vector of that structure to
+	do the following. 
+	(a) to read multiple sequences from the user and store them in your data structure. You should
+	read as many sequences as the user wishes to input. You will need to figure out how to
+	distinguish one sequence from another as the user inputs numbers, and how to determine if the
+	user has finished inputting all the sequences.
+	(b) that computes the mean of each sequence and store that value in your data structure.
+	(c) Write a function that computes the median of each sequence and store that value in your data
+	structure.
+	(d) that computes the mode of each sequence and store those values in your data structure.
+	(e) that computes the standard deviation of each sequence and store that value in your data
+	structure.
+	(f) that computes the variance of each sequence and store that value in your data structure.
+	(g) to display the mean, median, mode, standard deviation and variance of each sequence input by
+	the user
+	EE5103
+	2/25/22
+*/
+
+#include <iostream>
+#include <string.h>
+#include <vector>
+#include <math.h>
+
+using std::vector;
+using std::cout;
+using std::iterator;
+using std::cin;
+using std::endl;
+using std::string;
+
+class NumMath
+{
+private:
+	vector<double> a;
+	double me;
+	double med;
+	double mo;
+	double sd;
+	double v;
+public:
+	bool add_Vari();
+	double mean(vector<double>);
+	double mode(vector<double>);
+	double median(vector<double>);
+	double standardDeviation(vector<double>);
+	double variance(vector<double>);
+	void display();
+	bool empty();
+};
+
+bool NumMath::add_Vari()
+{
+	double d;
+	cout  << "\n**********************************************\n";
+	cout << "Please enter a list of numbers.\nIf a new list is needed type 11.22 \n";
+	cout << "Enter Number: ";	
+	while(cin >> d)
+	{
+		if(d == 11.22){
+			return true;
+		}
+
+		a.push_back(d);
+		cout << "\n";
+		cout << "Enter Number: ";
+	}
+
+	return false;
+}
+
+double NumMath::mean(vector<double> y)
+{
+	double count=0;
+	double t;
+	for(decltype(y.size()) i = 0; i < y.size(); i++)
+	{
+		t += y[i];
+		count++;
+	}
+
+	t = t/count;
+	return t;
+}
+
+double NumMath::mode(vector<double> y)
+{
+
+	vector<double> temp;
+	vector<double> temp2;
+	double t1=0;
+	int c = 0;
+	int p =0;
+
+	for(decltype(y.size()) i = 0; i <= y.size(); i++){
+		temp.push_back(y[i]);
+	}
+
+	for(decltype(y.size()) i = 0; i <= y.size(); i++)
+	{
+		for(decltype(y.size()) j = 0; j <= y.size(); j++)
+		{
+			if(y[i] == temp[j])
+				t1++;
+	
+		}
+		temp2.push_back(t1);
+	}
+
+	//cout <<"\nTemp position 0 is: " << temp2[0] << endl << endl;
+	c = temp2[0];
+	p =0;
+
+	for(decltype(y.size()) i = 1; i <= y.size(); i++)
+	{
+		if(c < temp2[i])
+		{
+			c = temp[i];
+			p = i;
+		}
+
+		if(c == temp2[i])
+			p=0;
+	}
+	if(p == 0)
+	{
+		cout << "There is no repeating number sending: ";
+		return 0;
+	}
+return y[p];
+}
+
+double NumMath::median(vector<double> y)
+{
+	double f =0;
+	
+	f = (double)(y[y.size()/2]);
+	return f;
+}
+
+double NumMath::standardDeviation(vector<double> y)
+{
+	double x =0;
+	double t=0;
+	double m = 0;
+	m = mean(y);
+
+	for(decltype(y.size()) i =0; i<y.size();i++)
+	{
+		
+		x = y[i] - m;
+		y[i] = pow(x,2);
+	}
+
+	t = mean(y);
+	x=0;
+	x = pow(t, 0.5);
+	return x;
+
+}
+
+double NumMath::variance(vector<double> y)
+{
+	double x =0;
+	double t=0;
+	double m = 0;
+	m = mean(y);
+
+	for(decltype(y.size()) i =0; i < y.size();i++)
+	{
+		
+		x = y[i] - m;
+		y[i] = pow(x,2);
+	}
+
+	t = mean(y);
+
+	return t;
+
+}
+
+void NumMath::display()
+{
+	cout  << "\n**********************************************\n";
+	if(a.size() == 0){
+		cout << "Empty list.\n";
+		return;
+	}
+
+	decltype(a.size()) i = 0;
+	cout << "The list size is: " << a.size() << endl;
+	cout << "{";
+	for(double t : a)
+	{
+		cout << t << ", ";
+		i++;
+	}
+	cout << "} \n";
+	cout << "Mean for this  list: " << mean(a) << endl;
+	cout << "Median for this  list: " << median(a) << endl;
+	cout << "Mode for this  list: " << mode(a) << endl;	
+	cout << "Variance for this list: " << variance(a) << endl;
+	cout << "Standard Deviation for this list: " << standardDeviation(a) << endl;
+	cout  << "\n**********************************************\n";
+	return;
+}
+
+bool NumMath::empty()
+{
+	a.clear();
+	return true;
+}
+
+
+int main()
+{
+	vector<NumMath> x;
+	NumMath t;
+	int d;
+	bool k = true;
+	
+
+	while(k)
+	{
+		cout  << "\n**********************************************\n";
+		cout << "Please do the following:\nEnter 1: To add varibles\nEnter 2: To show the math sections.\n";
+		cout << "Enter 3: Exit.\nPlease enter choice: ";
+		cin >> d;
+
+		switch(d){
+			case 1:
+					t.add_Vari();
+					break;
+			case 2:
+					cout << "\nThere are " << x.size() << " lists.\n";
+
+					for(NumMath l : x)
+					{
+						l.display();
+					}
+
+					break;
+			case 3:
+					k=false;
+					break;
+			default:
+					cout << "Please enter a valid input\n";
+
+		}
+		x.push_back(t);
+		t.empty();
+	}
+}
