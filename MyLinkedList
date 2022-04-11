@@ -1,0 +1,404 @@
+/**
+	Aaron Cantu
+	HW6
+Problem 1 (10 points)
+Extend the linked list class we developed in the class 
+today (March 31) with the following features:
+(a) (1 point) a function to check if the list is empty
+(b) (1 point) a function to check if the list is full
+(c) (2 points) an overloaded display operator
+(d) (2 points) operator==
+(e) (2 points) operator+
+(f) (2 points) reverse. This function reverses the 
+contents of the list without making an additional
+copy of the list. Do not deallocate any of the nodes. 
+Instead, do this by swapping the first
+element with the last element, the second element with 
+the second to last element, etc
+	4/1/22
+*/
+#include<iostream>
+using std::cout; 
+using std::cin; 
+using std::endl;
+using std::ostream;
+
+class Node
+{
+private:
+	int val;
+	Node* next;
+
+public:
+	Node();
+	Node(int);
+	int get_val() const;
+	bool set_val(int);
+	Node* get_next() const;
+	bool set_next(Node*);
+};
+
+Node::Node()
+{
+	val = 0;
+	next = nullptr;
+}
+
+Node::Node(int n)
+{
+	val = n;
+	next = nullptr;
+}
+
+int Node::get_val() const
+{
+	return val;
+}
+
+bool Node::set_val(int n)
+{
+	val = n;
+	return true;
+}
+
+Node* Node::get_next() const
+{
+	return next;
+}
+
+bool Node::set_next(Node* n)
+{
+	next = n;
+	return true;
+}
+
+class MyList
+{
+private:
+	Node* start;
+	int cap = 5;
+	int csz = 0;
+	void clean_up(Node*);
+	Node* get_address(int);
+
+public:
+	MyList();
+	MyList(const MyList&);
+	~MyList();
+	bool add(int);
+	bool insert_after(int,int);
+	void display() const;
+	bool is_present(int);
+	bool is_empty() const;
+	bool is_full() const;
+	int get_val(const MyList&) const;
+	bool operator==(MyList&);
+	MyList operator+(const MyList&);
+	MyList reverse();
+
+	MyList& operator=(const MyList&);
+
+	friend ostream& operator<<(ostream&, const MyList&);
+};
+
+MyList::MyList()
+{
+	start = nullptr;
+	csz =0;
+}
+
+void MyList::clean_up(Node* curr)
+{
+	Node *temp;
+	while (curr != nullptr)
+	{
+		temp = curr->get_next();
+		delete curr;
+		curr = temp;
+	}
+	csz =0;
+}
+
+Node* MyList::get_address(int v)
+{
+	if (!is_present(v))
+		return nullptr;
+	Node *curr = start;
+	while(curr != nullptr)
+	{
+		if (v == curr->get_val())
+			return curr;
+		curr = curr->get_next();
+	}
+	return nullptr;
+}
+
+MyList::MyList(const MyList& other)
+{
+	start = nullptr;
+	Node *curr =other.start;
+	while(curr != nullptr)
+	{
+		add(curr->get_val());
+		curr = curr->get_next();
+	}
+}
+
+MyList::~MyList()
+{
+	Node *temp;
+	clean_up(start);
+	csz =0;
+}
+
+bool MyList::add(int v)
+{
+	Node* temp = new Node(v);
+	if(csz == cap-1)
+	{
+		cout << "Lists full!\n";
+		return false;
+	}
+	if (start == nullptr)
+	{
+		start = temp;
+	}
+	else
+	{
+		temp->set_next(start);
+		start = temp;
+		csz++;
+	}
+	return true;
+}
+
+bool MyList::insert_after(int after, int v)
+{
+	Node* curr1 = get_address(after);
+	if (curr1 == nullptr)
+		return false;
+	Node* curr2 = curr1->get_next();
+	Node* temp = new Node(v);
+	curr1->set_next(temp);
+	temp->set_next(curr2);
+	csz++;
+	return true;
+}
+
+bool MyList::is_present(int v)
+{
+	Node *curr = start;
+	while(curr != nullptr)
+	{
+		if (v == curr->get_val())
+			return true;
+		curr = curr->get_next();
+	}
+	return false;
+}
+
+
+void MyList::display() const
+{
+	Node* curr = start;
+	while(curr != nullptr)
+	{
+		cout << curr->get_val() << " ";
+		curr = curr->get_next();
+	}
+	cout << endl;
+}
+
+MyList& MyList::operator=(const MyList& other)
+{
+	if (this == &other)
+		return *this;
+	clean_up(start);
+	start = nullptr;
+	Node *curr =other.start;
+	while(curr != nullptr)
+	{
+		add(curr->get_val());
+		curr = curr->get_next();
+	}
+	return *this;
+}
+
+bool MyList::is_empty() const
+{
+	if(start == nullptr)
+		return true;
+
+	return false;
+}
+
+bool MyList::is_full() const
+{
+	if(csz == cap-1)
+		return true;
+
+	return false;
+}
+
+bool MyList::operator==(MyList& other)
+{
+	Node* curr = start;
+	if(csz != other.csz)
+		return false;
+
+	while(curr != nullptr)
+	{
+		if(!(other.is_present(curr->get_val())))
+			return false;
+
+		curr = curr->get_next();
+	}
+
+	return true;
+
+}
+
+MyList MyList::operator+(const MyList& other)
+{
+	MyList temp(*this);
+	Node* curr = other.start;
+	//Initially made operator+ add two lists together.
+	// if(other.start == nullptr)
+	// 	return *this;
+	// if(start == nullptr)
+	// 	return other;
+
+	// while(curr != nullptr && ocurr != nullptr)
+	// {
+	// 	if(curr == nullptr)
+	// 	{
+	// 		temp.add(ocurr->get_val());
+	// 		ocurr = ocurr->get_next();
+	// 	}
+	// 	else if(ocurr == nullptr)
+	// 	{
+	// 		temp.add(curr->get_val());
+	// 		curr = curr->get_next();
+	// 	}
+	// 	else
+	// 	{
+	// 		temp.add((curr->get_val() + ocurr->get_val()));
+	// 		ocurr = ocurr->get_next();
+	// 		curr = curr->get_next();
+	// 	}
+	// }
+	// temp.reverse();
+
+	while(curr != nullptr)
+	{
+		temp.add(curr->get_val());
+		curr = curr->get_next();
+	}
+
+	return temp;		
+}
+
+MyList MyList::reverse()
+{
+	Node* curr = start;
+	MyList temp, temp2;
+
+	temp = *this;
+	temp2 = temp;
+	*this = temp2;
+
+	return *this;
+}
+
+int main()
+{
+	MyList test;
+	test.add(0);
+	test.add(1);
+	test.add(2);
+	test.add(3);
+	test.add(4);
+
+	cout << "Let's test the overloaded operator for printing!\n";
+	cout << test;
+	cout << endl;
+	cout << "Now let's reverse it!\n";
+	test.reverse();
+	cout << test;
+	cout << endl;
+	cout << "Time see if the list is full!\n";
+	cout << endl;
+	if(test.is_full())
+		cout << "We're Full!\n";
+	else
+		cout << "Nope still got room!\n";
+	cout << endl;
+	cout << "Let's add 2 MyLists!\n";
+	MyList test2;
+	test2.add(5);
+	test2.add(12);
+	test2.add(15);
+	test2.add(18);
+	test2.add(19);
+	MyList a;
+	MyList b;
+	a.add(10);
+	a.add(6);
+	b.add(5);
+	b.add(15);
+	cout << "First list!\n";
+	cout << a << endl;
+	cout << "Second list!\n";
+	cout << b;
+	cout << endl;
+	cout << "The added lists:\n";
+	MyList test3;
+	
+
+	test3 = a + b;
+	cout << test3;
+	cout << endl;
+
+	cout << "\nLet's see if the added list is empty!\n";
+
+	if(test3.is_empty())
+		cout << "Empty List!\n";
+	else
+		cout << "Not an empty list\n";
+
+	cout << "\nLet's make a new list and see if empty works!\n";
+	MyList test4;
+	if(test4.is_empty())
+		cout << "Empty List!\n";
+	else
+		cout << "Not an empty list\n";
+
+	cout << "\nLet's see if the orginal list is full! \n";
+	if(test.is_full())
+		cout << "It's full.\n";
+	else
+		cout << "It's not full.\n";
+
+	cout << "\nLet's use our previous new made list to check if not full works!\n";
+	if(test4.is_full())
+		cout << "It's full.\n";
+	else
+		cout << "It's not full.\n";
+
+test.display();
+
+	return 0;
+}
+
+ostream& operator<<(ostream& os, const MyList& x)
+{
+	Node *curr = x.start;
+	while(curr != nullptr)
+	{
+		os << curr->get_val()<< " ";
+		curr = curr->get_next();
+	}
+
+	cout << endl;
+	return os;
+}
