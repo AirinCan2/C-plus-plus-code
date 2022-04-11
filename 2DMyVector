@@ -1,0 +1,405 @@
+/**
+	Aaron Cantu
+	HW5-q1
+	One way to address the issue with vector is by taking the approach 
+	shown in the above figure. This new
+	data type holds a dynamic array of starting addresses of MyVectors.
+	Develop a new data type to support this idea – call it MultiVector. 
+	Do not use the internal vector type –
+	instead extend the MyVector class we implemented. In the figure:
+	(a) Each column holds ints. Therefore, a column is of type MyVector
+	that holds ints.
+	(b) Each column can hold any number of ints. This is already 
+	supported by our MyVector class.
+	(c) However, there can be any number of columns.
+	As the user pushes back ints, MultiVector should decide when 
+	to create a new column. Perhaps, a new
+	column could be created after a predetermined number of array moves 
+	within a single column.
+	Support the following: constructor, destructor, copy constructor, 
+	add element, display elements,
+	overloaded = and == operators. Using a main function, demonstrate 
+	the features of the MultiVector.
+	EE5103
+	3/24/22
+*/
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+using std::ostream;
+
+//My Vector class made in class.
+class MyVector
+{
+private:
+	int* p;
+	int csz;
+	int cap;
+	int INC = 10;
+	bool move();
+
+public:
+	MyVector();
+	MyVector(const MyVector &);
+	bool push_back(int);
+	void display() const;
+	int size() const;
+	int& operator[](int) const;
+	~MyVector();
+	MyVector& operator=(const MyVector &);
+	bool operator==(const MyVector &) const;
+	MyVector operator+(const MyVector &) const;
+	friend ostream & operator<<(ostream &, const MyVector &);
+	bool compare(const MyVector&) const;
+};
+
+MyVector::MyVector()
+{
+	csz = 0;
+	cap = 5;
+	p = new int[cap];
+}
+
+MyVector::MyVector(const MyVector & other)
+{
+	csz = other.csz;
+	this->cap = other.cap;
+	INC = other.INC;
+	p = new int[cap];
+	for (int i = 0; i < csz; ++i)
+		p[i] = other.p[i];
+}
+
+bool MyVector::move()
+{
+	int * q = new int[cap+INC];
+	cap = cap + INC;
+	for (int i = 0; i < csz; ++i)
+		q[i] = p[i];
+	delete[] p;
+	p = q;
+	return true;
+}
+
+bool MyVector::push_back(int v)
+{
+	if (csz == cap)
+		move();
+	p[csz] = v;
+	++csz;
+	return true;
+}
+
+void MyVector::display() const
+{
+	for (int i = 0; i < csz; ++i)
+		cout << p[i] << " ";
+	cout << endl;
+}
+
+int MyVector::size() const
+{
+	return csz;
+}
+
+int & MyVector::operator[](int i) const
+{
+	return p[i];
+}
+
+MyVector::~MyVector()
+{
+	delete[] p;
+}
+
+MyVector& MyVector::operator=(const MyVector & other)
+{
+	if (this == &other)
+		return *this;
+	delete[] p;
+	cap = other.cap;
+	csz = other.csz;
+	p = new int[cap];
+	for (int i = 0; i < csz; ++i)
+		p[i] = other.p[i];
+	return *this;
+}
+
+bool MyVector::operator==(const MyVector &other) const
+{
+	if (csz != other.csz)
+		return false;
+	for (int i = 0; i < csz; ++i)
+		if (p[i] != other.p[i])
+			return false;
+	return true;
+}
+
+MyVector MyVector::operator+(const MyVector &other) const
+{
+	MyVector temp;
+	temp.csz = 0;
+	temp.cap = cap + other.cap + INC;
+	temp.p = new int[temp.cap];
+	for (int i = 0; i < csz; ++i)
+		temp.push_back(p[i]);
+	for (int i = 0; i < other.csz; ++i)
+		temp.push_back(other.p[i]);
+
+	return temp;
+
+}
+
+bool MyVector::compare(const MyVector & other) const
+{
+	for(int i = 0; i < csz; i++){
+		if(p[i] != other.p[i])
+			return true;
+	}
+	return false;
+}
+/**
+ * MultiVect class is similar to the my vector class but rather uses a 
+ * MyVector pointer. This then shifts the array of MyVector to do columns
+ * The == operator is done by using a MyVector function called Compare
+ * Compare just uses the == of MyVector to make sure each element is correct.
+ * Most functionality is done via the MyVector Class. 
+ */
+class MultiVect
+{
+private:
+	//int* mP;
+	MyVector* mP;
+	int mCsz;
+	int mCap;
+	int INC = 5;
+	bool move();
+	
+public:
+	MultiVect();
+	~MultiVect();
+	bool push_back(int);
+	void display() const;
+	MultiVect(const MultiVect &);
+	MultiVect& operator=(const MultiVect &);
+	bool operator==(const MultiVect &) const;
+
+};
+
+MultiVect& MultiVect::operator=(const MultiVect& other)
+{
+
+	if (this == &other)
+		return *this;
+	delete[] mP;
+	mCap = other.mCap;
+	mCsz = other.mCsz;
+	mP = new MyVector[mCap];
+	for (int i = 0; i <= mCsz; ++i)
+		mP[i] = other.mP[i];
+	return *this;
+}
+
+bool MultiVect::operator==(const MultiVect& other) const
+{
+	if(mCsz != other.mCsz)
+		return false;
+	
+	for(int i =0; i <= mCsz; i++)
+		if(mP[i].compare(other.mP[i]))
+			return false;
+
+	return true;
+}
+
+bool MultiVect::move()
+{
+	
+	MyVector * q = new MyVector[mCap+INC];
+	mCap = mCap + INC;
+	for (int i = 0; i <= mCsz; ++i)
+		q[i] = mP[i];
+	
+
+	delete[] mP; 
+
+	mP = q;	
+	
+
+	return true;
+}
+
+MultiVect::MultiVect()
+{
+	mCsz = 0;
+	mCap = 5;
+	mP = new MyVector[mCap];
+}
+
+bool MultiVect::push_back(int x)
+{
+
+	if (mCsz == mCap-1)
+		move();
+
+	if(mP[mCsz].size() == 5)
+		mCsz++;
+
+	mP[mCsz].push_back(x);
+
+
+	
+	return true;
+
+}
+
+MultiVect::~MultiVect()
+{
+	delete[] mP;
+}
+
+void MultiVect::display() const
+{	
+	for (int i = 0; i <= mCsz; ++i)
+	{
+		cout << "Items in Column " << i+1 << ": ";
+		mP[i].display();
+	}
+
+	cout << endl;
+}
+
+MultiVect::MultiVect(const MultiVect & other)
+{
+	mCsz = other.mCsz;
+	this->mCap = other.mCap;
+	INC = other.INC;
+	mP = new MyVector[mCap];
+	for (int i = 0; i <= mCsz; ++i)
+		mP[i] = other.mP[i];
+}
+
+ostream & operator<<(ostream &, const MyVector &);
+
+int main()
+{
+	MultiVect x;
+
+	//1st 5
+	x.push_back(0);
+	x.push_back(1);
+	x.push_back(2);
+	x.push_back(3);
+	x.push_back(4);
+	//2nd
+	x.push_back(0);
+	x.push_back(1);
+	x.push_back(2);
+	x.push_back(3);
+	x.push_back(4);
+	cout << "Let's see x!\n";
+	x.display();
+	
+	MultiVect y;
+	cout << "\nLet's make y = x\n";
+	y = x;
+
+	y.display();
+
+	cout << "\nLet's see if x == y\n";
+	if(y == x)
+		cout << "x = y\n";
+	else
+		cout << "x != y\n";
+
+	cout << "\nMaking a 3rd Multi Vector!\n";
+
+	MultiVect z;
+	z.push_back(5);
+	z.push_back(10);
+	z.push_back(11);
+	z.push_back(5);
+	z.push_back(6);
+
+	z.push_back(0);
+	z.push_back(1);
+	z.push_back(2);
+	z.push_back(3);
+	z.push_back(4);
+
+	z.display();
+
+	cout << "\nSee if x and z are the equal.\n";
+	if(z == x)
+		cout << "x = z\n";
+	else
+		cout << "x != z\n";
+
+	cout << "\nLet's try a smaller vector vs a bigger one!\n";
+
+	cout << "Creating a with 2 elements to compare with x.\n";
+	MultiVect a;
+	a.push_back(10);
+	a.push_back(5);
+	a.display();
+
+	cout << "\nSee if a and x are the equal.\n";
+	if(a == x)
+		cout << "x = a\n";
+	else
+		cout << "x != a\n";
+
+	cout << "Let's make b(a) and display b~\n";
+	MultiVect b(a);
+	b.display();
+
+	cout << "Test Multi Vect Expansion\n";
+	MultiVect c;
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.push_back(0);
+	c.push_back(1);
+	c.push_back(2);
+	c.push_back(3);
+	c.push_back(4);
+
+	c.display();
+
+	return 0;
+}
