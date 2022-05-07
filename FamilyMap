@@ -1,0 +1,163 @@
+/**
+* Aaron Cantu
+* 4/25/22
+* Problem 1:
+* Define a map for which the key is the Family's last name and 
+* the value is a vector of chidlren's names.
+* write code to add new families and to add new children to an existing family
+*/
+
+#include <iostream>
+#include <map>
+#include <string.h>
+#include <vector>
+#include <iterator>
+
+using std::vector;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::map;
+using std::pair;
+
+
+class Entry
+{
+private:
+		map<string,vector<string>> fam;
+		vector<string> name;
+
+public:
+	void add(string, string);
+	void readBack(string);
+
+};
+
+void Entry::add(string last, string first)
+{
+	fam[last].push_back(first);
+	return;
+}
+
+void Entry::readBack(string last)
+{
+
+
+	auto it = fam.find(last);
+
+	vector<string> v = it->second;
+
+	cout << last << " family has these members: " ;
+
+	for(auto i = 0; i < v.size(); i++)
+	{
+		cout << v[i];
+
+		if(i != v.size() -1)
+			cout << ", ";
+	}
+
+	cout << endl;
+
+	return;
+}
+
+//*****************************************************************************************
+
+int main()
+{
+	int x =0;
+	string first, last, in;
+	Entry name;
+		
+	cout << "Please enter the number you'd like to do.\n";
+	cout << "1. Enter a list of people\n2. Read back a list of family members.\n";
+	cout << "3. Add to a family list.\n";
+	cout << "4. To exit program"
+
+	while(cin >> x)
+	{
+
+
+		switch(x){
+			case 1:
+					while(in != "exit")
+					{
+						cout << "\n------------------------------------------------------------------------\n";
+						cout << "Please give us the name of the family. Last name then first name.\n";
+						cout << "\nWhat is the family member's last name: ";
+						cin >> in;
+
+						for(auto & c : in)
+							c = toupper(c);
+						
+						last = in;
+						if(last == "EXIT")
+							break;
+						cout << "\nPlease enter the first name now: ";
+						cin >> in;
+						cout << endl;
+						for(auto & c : in)
+							c = toupper(c);
+
+						first = in;
+						if(last == "EXIT")
+							break;
+						name.add(last, first);
+						cout << endl << "To exit type EXIT" << endl;
+
+					}
+					break;
+					
+			case 2:
+					cout << "\n------------------------------------------------------------------------\n";
+					cout << "\n Please enter the last name of the family you want to list all members.\n";
+					cin >> in;
+					cout << endl;
+
+					for(auto & c : in)
+							c = toupper(c);
+						
+					last = in;
+
+					name.readBack(last);
+					break;
+			case 3:
+					cout << "\n Please enter the last name of the family you want to add members to.\n";
+					cin >> in;
+					cout << endl;
+					for(auto & c : in)
+							c = toupper(c);						
+					last = in;
+
+					while(in != "EXIT" || first != "EXIT")
+					{
+						cout << "Please enter the first name :";
+						cin >> in;
+						for(auto & c : in)
+							c = toupper(c);						
+						first = in;
+
+						name.add(last, first);
+					}
+
+					cout << "\nTo exit type 'Exit'\n";
+					break;
+			default:
+					cout << "\n------------------------------------------------------------------------\n";
+					cout << "Invalid entry, Please try again.\n";
+					break;
+		}
+	cout << endl;
+	cout << "\n------------------------------------------------------------------------\n";
+	cout << "Please enter the number you'd like to do.\n";
+	cout << "1. Enter a list of people\n2. Read back a list of family members.\n";
+	cout << "3. Add to a family list.\n";
+	cout << "4. To exit program"
+	}
+
+
+	return 0;
+
+}
