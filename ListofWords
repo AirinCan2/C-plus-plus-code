@@ -1,0 +1,85 @@
+/**
+* Aaron Cantu
+* 4/25/22
+* Problem 2:
+* Read a number of lines from the user. Define a map that associates 
+* words with lists (from sequential containers) of line numbers on 
+* which what word mihgt occur. Write a program to demonstrate
+*/
+
+#include <iostream>
+#include <map>
+#include <string.h>
+#include <vector>
+#include <iterator>
+#include <sstream>
+
+using std::vector;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::map;
+using std::pair;
+using std::getline;
+using std::stringstream;
+
+int main()
+{
+	string word;
+	string line;
+	
+	int linecount;
+	map<string, vector<int>> mL;
+	map<string,int> mL2;
+	int count =0;
+
+	cout << "Enter as many lines of words you'd like.\n";
+	while(getline(cin, line)){
+		
+		stringstream X(line);
+		while(getline(X, word,' '))
+		{
+			mL[word].push_back(count);
+			//mL2.insert({word, count});
+		}
+
+
+		count++;
+		
+	}
+	cout << "\nLet's see what words are on what lines.\n\n";
+	auto itr = mL.begin();
+	vector<int> v= itr->second;
+	
+	while(itr != mL.end()){
+
+		v = itr->second;
+
+		cout << "The word " << itr->first << " can be seen on lines: " ;
+
+		for(auto i = 0; i < v.size(); i++)
+		{
+			cout << v[i] +1;
+
+			if(i != v.size() -1)
+				cout << ", ";
+		}
+
+		itr++;
+		cout << endl;
+	}
+
+	cout <<endl;
+	//The other wy to do this design. 
+	/**
+	auto itr2 = mL2.begin();
+
+	while(itr2 != mL2.end())
+	{
+		cout << "\nWord " << itr2->first << ": appears on line " << itr2->second+1 << endl;
+		itr2++;
+	}
+	*/
+
+}
