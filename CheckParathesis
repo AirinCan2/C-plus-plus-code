@@ -1,0 +1,110 @@
+/**
+* Aaron Cantu
+* 4/25/22
+* Problem 3:
+* Write a function that takes a parenthesized expression 
+* in the form of a string and returns true if the
+* expression is balanced and false otherwise. Use a stack 
+* to process parenthesized expressions. When you
+* see an open parenthesis, note that it was seen. When you 
+* see a close parenthesis after an open
+* parenthesis pop elements down to and including the open 
+* parenthesis off the stack.
+*/
+
+#include <iostream>
+#include <map>
+#include <string.h>
+#include <vector>
+#include <iterator>
+#include <sstream>
+#include <stack>
+
+using std::vector;
+using std::cout;
+using std::cin;
+using std::endl;
+using std::string;
+using std::map;
+using std::pair;
+using std::getline;
+using std::stringstream;
+using std::stack;
+bool corrFormat(string&);
+int main()
+{
+	string line;
+	
+
+	cout << "Please enter a line.\n";
+	cout << "If a paranthesis exists then it will check to see if there is a ')' as well.\n";
+	while(getline(cin, line))
+	{
+		
+		if(corrFormat(line))
+		{
+			cout << "\nNo problems.\n";
+			cout << line << endl <<endl; 
+		}
+		else
+		{
+			cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+			cout << "Incorrect format!\n";
+			cout << line << endl << endl;
+		}
+
+	}
+
+	return 0;
+}
+
+//Check to see if stack is correct!
+bool corrFormat(string& line)
+{
+	stack<char> hold;
+	string word;
+	//Stream to go through each word individually
+	stringstream X(line);
+		//while in the stream make word == anything before a ' '.
+		while(getline(X, word,' '))
+		{
+			//What's the size so we can check for ) in each word.
+			auto ws = word.size();
+			//Check for the first requirement.
+			//if exists push it into stack.
+			if(word == "(" || word[0] == '(')
+			{
+				hold.push('(');
+				cout << "\nA '(' has been seen!\n";
+			}
+			//If a closing ')' doesn't appear we're gonna need to check
+			//if there is a problem. 
+			if(!hold.empty())
+			{
+				//If there is a ( check to see if we ever close with ). 
+				//cout << "\nCurrent word is: " << word << endl << endl;
+				if(word == ")"|| word[ws-1] == ')')
+				{
+					//If there is a '(' then pop the stack and return true
+					//for good format. 
+					//cout << "\n Last char is: " << word[ws-1] << endl << endl;
+					hold.pop();
+					return true;
+				}
+			}
+			if(word == ")" || word[0] == ')')
+			{
+				cout << "\nCannot enter a ')' before a '('.\n";
+				return false;
+			}
+
+		}
+		//If we're not empty pop the stack and return false. 
+		if(!hold.empty())
+			{
+				cout << "\nProblem! There exists a " << hold.top() << " in stack!\n";
+				hold.pop();
+				return false;
+				
+			}
+}
